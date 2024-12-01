@@ -1,0 +1,21 @@
+version: "3.8"
+
+services:
+  localstack:
+    container_name: "url-shortener-service-localstack_main"
+    image: localstack/localstack
+    ports:
+      - "4566:4566"
+    environment:
+      - DEBUG=1
+      - DOCKER_HOST=unix:///var/run/docker.sock
+    volumes:
+      - "$PWD/init-aws.sh:/etc/localstack/init/ready.d/init-aws.sh"  # ready hook
+      - "${LOCALSTACK_VOLUME_DIR:-./volume}:/var/lib/localstack"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+
+  redis:
+    container_name: "url-shortener-service-redis"
+    image: redis:latest
+    ports:
+      - "6379:6379" # Redis default port
