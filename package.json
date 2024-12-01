@@ -1,0 +1,66 @@
+{
+  "name": "mgrb-backend-template",
+  "version": "1.0.0",
+  "description": "A backend template built with Express and Node.js to kickstart development quickly.",
+  "main": "dist/index.js",
+  "type": "commonjs",
+  "scripts": {
+    "start:dev": "ts-node-dev --respawn -r tsconfig-paths/register ./src/bin/www.ts",
+    "build": "tsc -p tsconfig.json && tsconfig-replace-paths -p tsconfig.json",
+    "start": "node build/src/bin/www.js",
+    "lint": "eslint --ext .ts ./src --max-warnings=0",
+    "lint:fix": "eslint --fix --ext .ts ./src",
+    "test": "jest --config jest.config.ts --coverage",
+    "test:watch": "jest --config jest.config.ts --watch",
+    "format": "prettier --write \"./src/**/*.{ts,js,json,md}\"",
+    "check-format": "prettier --check \"./src/**/*.{ts,js,json,md}\"",
+    "clean": "rm -rf build",
+    "purge": "rm -rf node_modules && npm cache clean --force",
+    "prepare": "husky install"
+  },
+  "dependencies": {
+    "@asteasolutions/zod-to-openapi": "^7.2.0",
+    "axios": "^1.7.7",
+    "axios-retry": "^4.5.0",
+    "dotenv": "^16.4.5",
+    "express": "^5.0.1",
+    "pino": "^9.5.0",
+    "uuid": "^10.0.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^19.5.0",
+    "@commitlint/config-conventional": "^19.5.0",
+    "@types/express": "^4.17.17",
+    "@types/jest": "^29.5.13",
+    "@types/node": "^20.16.12",
+    "@types/supertest": "^6.0.2",
+    "@types/uuid": "^10.0.0",
+    "@typescript-eslint/eslint-plugin": "^8.10.0",
+    "@typescript-eslint/parser": "^8.10.0",
+    "eslint": "^8.57.1",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.2.1",
+    "husky": "~8.0.3",
+    "jest": "~29.6.1",
+    "lint-staged": "^15.2.10",
+    "minimatch": "^3.0.5",
+    "pino-pretty": "^11.3.0",
+    "prettier": "~3.0.0",
+    "supertest": "^7.0.0",
+    "ts-jest": "^29.2.5",
+    "ts-node-dev": "^2.0.0",
+    "tsconfig-paths": "^4.2.0",
+    "tsconfig-replace-paths": "^0.0.14",
+    "typescript": "~5.1.6"
+  },
+  "lint-staged": {
+    "*.ts": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{js,json,md}": [
+      "prettier --write"
+    ]
+  }
+}
