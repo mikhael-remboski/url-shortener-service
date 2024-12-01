@@ -21,7 +21,7 @@ export class RedisCacheImpl<T> implements RedisCache<T> {
     //TODO hit miss metric
 
     const cachedValue = await this.get(key);
-    if (cachedValue !== undefined) {
+    if (cachedValue) {
       return cachedValue;
     }
 

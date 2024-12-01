@@ -1,4 +1,4 @@
 export interface UrlShortenerModel {
-  shortUrl: string;
+  shortUrlPath: string;
   originalUrl: string;
 }

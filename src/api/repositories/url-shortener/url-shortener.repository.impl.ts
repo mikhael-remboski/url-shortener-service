@@ -6,29 +6,33 @@ import { DynamoDBServiceException } from '@aws-sdk/client-dynamodb';
 import { ApiError } from '#common/errors/api-error';
 import logger from '#common/logger/logger';
 import RequestContext from '#common/middlewares/request-context/request-context';
+import { UrlShortenerRepository } from '#api/repositories/url-shortener/url-shortener.repository';
 
-export class UrlShortenerRepositoryImpl {
+export class UrlShortenerRepositoryImpl implements UrlShortenerRepository {
   constructor(
     private readonly dynamoDB: DynamoClient,
     private readonly cache: RedisCache<string>,
   ) {}
 
-  async getOriginalUrlByShortUrl(shortUrl: string): Promise<UrlShortenerModel> {
-    const originalUrl = await this.cache.getOrExecute(shortUrl, async () => {
-      const record = await this.dynamoDB.get(shortUrl);
-      return record.url;
-    });
+  async getOriginalUrlByPath(shortUrlPath: string): Promise<UrlShortenerModel> {
+    const originalUrl = await this.cache.getOrExecute(
+      shortUrlPath,
+      async () => {
+        const record = await this.dynamoDB.get(shortUrlPath);
+        return record.url;
+      },
+    );
     return {
-      shortUrl,
+      shortUrlPath: shortUrlPath,
       originalUrl,
     };
   }
 
-  async saveNewShortUrl(data: UrlShortenerModel): Promise<UrlShortenerModel> {
+  async saveNewShortPath(data: UrlShortenerModel): Promise<UrlShortenerModel> {
     const result = await safeAsync<DynamoDataDTO, DynamoDBServiceException>(
       () =>
         this.dynamoDB.put({
-          id: data.shortUrl,
+          id: data.shortUrlPath,
           url: data.originalUrl,
           createdAt: Date.now(),
         }),
@@ -47,15 +51,15 @@ export class UrlShortenerRepositoryImpl {
     }
 
     return {
-      shortUrl: result.data!.id,
+      shortUrlPath: result.data!.id,
       originalUrl: result.data!.url,
     };
   }
 
-  async deleteShortUrl(shortUrl: string): Promise<void> {
+  async deleteShortUrlPath(shortUrlPath: string): Promise<void> {
     const [dynamoPromise, redisPromise] = [
-      this.dynamoDB.delete(shortUrl),
-      this.cache.delete(shortUrl),
+      this.dynamoDB.delete(shortUrlPath),
+      this.cache.delete(shortUrlPath),
     ];
 
     const [dynamoResult, redisResult] = await Promise.all([
