@@ -30,6 +30,10 @@ export class RedisCacheImpl<T> implements RedisCache<T> {
     return value;
   }
 
+  async delete(key: string): Promise<void> {
+    await this.client.del(key);
+  }
+
   private async get(key: string): Promise<T | undefined> {
     const value = await this.client.get(key);
     if (value === null) return undefined;

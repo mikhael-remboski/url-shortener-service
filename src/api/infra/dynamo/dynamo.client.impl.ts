@@ -6,6 +6,7 @@ import {
 import { DynamoDBClient, GetItemCommand } from '@aws-sdk/client-dynamodb';
 import { DynamoConfigDTO, DynamoDataDTO } from './dynamo.dto';
 import { DynamoClient } from '#api/infra/dynamo/dynamo.client';
+import { ApiError } from '#common/errors/api-error';
 
 export class DynamoClientImpl implements DynamoClient {
   private readonly dynamoDBDocumentClient: DynamoDBDocumentClient;
@@ -29,7 +30,7 @@ export class DynamoClientImpl implements DynamoClient {
     const result = await this.dynamoDBDocumentClient.send(command);
 
     if (!result.Item) {
-      throw new Error(`Item with ID "${id}" not found`);
+      throw new ApiError(`Item with ID "${id}" not found`, 404);
     }
 
     return {
