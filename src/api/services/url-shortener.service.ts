@@ -1,9 +1,9 @@
-import { UrlShortenerResponse } from '#domain/url-shortener';
+import { ShortenUrlRequest, UrlShortenerResponse } from '#domain/url-shortener';
 
 export interface UrlShortenerService {
-  shortUrl(url: URL): Promise<UrlShortenerResponse>;
+  shortUrl(shortenUrlReq: ShortenUrlRequest): Promise<UrlShortenerResponse>;
 
-  getUrl(shortUrl: URL): Promise<UrlShortenerResponse>;
+  getUrl(shortUrlPath: string): Promise<UrlShortenerResponse>;
 
-  deleteUrl(shortUrl: URL): Promise<void>;
+  deleteUrl(shortUrlPath: string): Promise<void>;
 }

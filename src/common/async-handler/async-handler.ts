@@ -15,16 +15,29 @@ interface FormattedError {
   message: string;
 }
 
+/**
+ * Handles Zod validation errors and sends a formatted response.
+ *
+ * @param res - The Express response object.
+ * @param error - The ZodError to handle.
+ */
 const handleZodError = (res: Response, error: ZodError) => {
-  const formattedErrors: FormattedError[] = error.errors.map((e) => ({
-    path: e.path.join('.'),
-    message: e.message,
-  }));
+  const firstError = error.errors[0];
+  const formattedError: FormattedError = {
+    path: firstError.path.join('.'),
+    message: firstError.message,
+  };
+
   logger.error(
-    { errors: formattedErrors, ...RequestContext.getInstance() },
+    { error: formattedError, ...RequestContext.getInstance() },
     'Zod error',
   );
-  res.status(400).json(formattedErrors);
+
+  res.status(400).json({
+    message: `${formattedError.path}: ${formattedError.message}`,
+    httpStatus: 400,
+    name: 'ValidationError',
+  });
 };
 
 /**
@@ -38,7 +51,8 @@ export const asyncHandler =
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       await action(req, res, next);
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
+      //eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       if (error instanceof ZodError) {
         handleZodError(res, error);

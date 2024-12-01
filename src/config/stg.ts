@@ -21,5 +21,6 @@ export default {
       maxRetriesPerRequest: 2,
     },
   },
+  shortUrlHost: process.env.SHORT_URL_HOST || 'http://localhost:8080',
   env: ENV.STG,
 } as AppConfig;

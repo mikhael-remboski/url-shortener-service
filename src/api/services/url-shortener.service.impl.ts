@@ -1,11 +1,11 @@
 import { UrlShortenerService } from '#api/services/url-shortener.service';
 import {
+  ShortenUrlRequest,
   UrlShortenerResponse,
   UrlShortenerResponseSchema,
 } from '#domain/url-shortener';
 import { UrlShortenerRepository } from '#api/repositories/url-shortener';
 import { nanoid } from 'nanoid';
-import { ApiError } from '#common/errors/api-error';
 
 export class UrlShortenerServiceImpl implements UrlShortenerService {
   constructor(
@@ -13,10 +13,13 @@ export class UrlShortenerServiceImpl implements UrlShortenerService {
     private readonly shortUrlHost: string,
   ) {}
 
-  async shortUrl(url: URL): Promise<UrlShortenerResponse> {
+  async shortUrl(
+    shortenUrlReq: ShortenUrlRequest,
+  ): Promise<UrlShortenerResponse> {
+    const url = new URL(shortenUrlReq.url);
     const shortUrlPath = nanoid(6);
     const shortUrlHost = this.shortUrlHost;
-    const originalUrl = `${url.protocol}//${url.host}${url.pathname}`;
+    const originalUrl = `${url.protocol}//${url.host}${url.pathname}${url.search}`;
 
     await this.urlShortenerRepository.saveNewShortPath({
       shortUrlPath: shortUrlPath,
@@ -33,13 +36,7 @@ export class UrlShortenerServiceImpl implements UrlShortenerService {
     return response;
   }
 
-  async getUrl(shortUrl: URL): Promise<UrlShortenerResponse> {
-    if (shortUrl.hostname !== new URL(this.shortUrlHost).hostname) {
-      throw new ApiError('Invalid short URL', 400);
-    }
-
-    const shortUrlPath = shortUrl.pathname;
-
+  async getUrl(shortUrlPath: string): Promise<UrlShortenerResponse> {
     const shorUrlResponse =
       await this.urlShortenerRepository.getOriginalUrlByPath(shortUrlPath);
 
@@ -53,9 +50,7 @@ export class UrlShortenerServiceImpl implements UrlShortenerService {
     return response;
   }
 
-  async deleteUrl(shortUrl: URL): Promise<void> {
-    const shortUrlPath = shortUrl.pathname;
-
+  async deleteUrl(shortUrlPath: string): Promise<void> {
     return this.urlShortenerRepository.deleteShortUrlPath(shortUrlPath);
   }
 }

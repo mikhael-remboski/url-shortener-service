@@ -11,3 +11,9 @@ export const UrlShortenerResponseSchema = z
   .openapi('UrlShortenerResponse');
 
 export type UrlShortenerResponse = z.infer<typeof UrlShortenerResponseSchema>;
+
+export const ShortenUrlRequestSchema = z.object({
+  url: z.string().url(),
+});
+
+export type ShortenUrlRequest = z.infer<typeof ShortenUrlRequestSchema>;

@@ -1,5 +1,6 @@
 import { UrlShortenerServiceImpl } from './url-shortener.service.impl';
 import { UrlShortenerRepository } from '#api/repositories/url-shortener';
+import { ShortenUrlRequest, UrlShortenerResponse } from '#domain/url-shortener';
 import { nanoid } from 'nanoid';
 
 jest.mock('nanoid', () => ({
@@ -29,8 +30,10 @@ describe('UrlShortenerServiceImpl', () => {
 
   describe('shortUrl', () => {
     it('should generate and save a short URL successfully', async () => {
-      const url = new URL('https://example.com/path');
-      const expectedResponse = {
+      const shortenUrlReq: ShortenUrlRequest = {
+        url: 'https://example.com/path',
+      };
+      const expectedResponse: UrlShortenerResponse = {
         shortUrl: 'https://me.li/abc123',
         originalUrl: 'https://example.com/path',
       };
@@ -39,7 +42,7 @@ describe('UrlShortenerServiceImpl', () => {
         mockUrlShortenerRepository.saveNewShortPath as jest.Mock
       ).mockResolvedValue(undefined);
 
-      const result = await urlShortenerService.shortUrl(url);
+      const result = await urlShortenerService.shortUrl(shortenUrlReq);
 
       expect(mockUrlShortenerRepository.saveNewShortPath).toHaveBeenCalledWith({
         shortUrlPath: 'abc123',
@@ -49,25 +52,27 @@ describe('UrlShortenerServiceImpl', () => {
     });
 
     it('should throw an error if saving the short URL fails', async () => {
-      const url = new URL('https://example.com/path');
+      const shortenUrlReq: ShortenUrlRequest = {
+        url: 'https://example.com/path',
+      };
       (
         mockUrlShortenerRepository.saveNewShortPath as jest.Mock
       ).mockRejectedValue(new Error('Save failed'));
 
-      await expect(urlShortenerService.shortUrl(url)).rejects.toThrow(
+      await expect(urlShortenerService.shortUrl(shortenUrlReq)).rejects.toThrow(
         'Save failed',
       );
     });
   });
 
   describe('getUrl', () => {
-    it('should return the original URL for a valid short URL', async () => {
-      const shortUrl = new URL('https://me.li/abc123');
+    it('should return the original URL for a valid short URL path', async () => {
+      const shortUrlPath = 'abc123';
       const repositoryResponse = {
         shortUrlPath: 'abc123',
         originalUrl: 'https://example.com/path',
       };
-      const expectedResponse = {
+      const expectedResponse: UrlShortenerResponse = {
         shortUrl: 'https://me.li/abc123',
         originalUrl: 'https://example.com/path',
       };
@@ -76,58 +81,50 @@ describe('UrlShortenerServiceImpl', () => {
         mockUrlShortenerRepository.getOriginalUrlByPath as jest.Mock
       ).mockResolvedValue(repositoryResponse);
 
-      const result = await urlShortenerService.getUrl(shortUrl);
+      const result = await urlShortenerService.getUrl(shortUrlPath);
 
       expect(
         mockUrlShortenerRepository.getOriginalUrlByPath,
-      ).toHaveBeenCalledWith('/abc123');
+      ).toHaveBeenCalledWith(shortUrlPath);
       expect(result).toEqual(expectedResponse);
     });
 
-    it('should throw an error if the short URL hostname is invalid', async () => {
-      const invalidShortUrl = new URL('https://invalid-short.ly/abc123');
-
-      await expect(urlShortenerService.getUrl(invalidShortUrl)).rejects.toThrow(
-        'Invalid short URL',
-      );
-    });
-
     it('should throw an error if retrieving the original URL fails', async () => {
-      const shortUrl = new URL('https://me.li/abc123');
+      const shortUrlPath = 'abc123';
 
       (
         mockUrlShortenerRepository.getOriginalUrlByPath as jest.Mock
       ).mockRejectedValue(new Error('Retrieval failed'));
 
-      await expect(urlShortenerService.getUrl(shortUrl)).rejects.toThrow(
+      await expect(urlShortenerService.getUrl(shortUrlPath)).rejects.toThrow(
         'Retrieval failed',
       );
     });
   });
 
   describe('deleteUrl', () => {
-    it('should delete a short URL successfully', async () => {
-      const shortUrl = new URL('https://me.li/abc123');
+    it('should delete a short URL path successfully', async () => {
+      const shortUrlPath = 'abc123';
 
       (
         mockUrlShortenerRepository.deleteShortUrlPath as jest.Mock
       ).mockResolvedValue(undefined);
 
-      await urlShortenerService.deleteUrl(shortUrl);
+      await urlShortenerService.deleteUrl(shortUrlPath);
 
       expect(
         mockUrlShortenerRepository.deleteShortUrlPath,
-      ).toHaveBeenCalledWith('/abc123');
+      ).toHaveBeenCalledWith(shortUrlPath);
     });
 
-    it('should throw an error if deleting the short URL fails', async () => {
-      const shortUrl = new URL('https://me.li/abc123');
+    it('should throw an error if deleting the short URL path fails', async () => {
+      const shortUrlPath = 'abc123';
 
       (
         mockUrlShortenerRepository.deleteShortUrlPath as jest.Mock
       ).mockRejectedValue(new Error('Delete failed'));
 
-      await expect(urlShortenerService.deleteUrl(shortUrl)).rejects.toThrow(
+      await expect(urlShortenerService.deleteUrl(shortUrlPath)).rejects.toThrow(
         'Delete failed',
       );
     });

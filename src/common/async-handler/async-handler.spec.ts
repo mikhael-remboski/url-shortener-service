@@ -68,11 +68,10 @@ describe('asyncHandler Middleware', () => {
       .post('/zod-error')
       .send({ id: 'invalid-uuid' }); // Invalid UUID to trigger ZodError
     expect(response.status).toBe(400);
-    expect(response.body).toEqual([
-      {
-        path: 'id',
-        message: 'Invalid uuid',
-      },
-    ]);
+    expect(response.body).toEqual({
+      httpStatus: 400,
+      message: 'id: Invalid uuid',
+      name: 'ValidationError',
+    });
   });
 });

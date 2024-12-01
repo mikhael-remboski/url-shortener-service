@@ -21,5 +21,6 @@ export default {
       maxRetriesPerRequest: 2,
     },
   },
+  shortUrlHost: 'http://localhost:8080',
   env: ENV.LOCAL,
 } as AppConfig;

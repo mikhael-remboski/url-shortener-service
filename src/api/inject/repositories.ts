@@ -1,7 +1,8 @@
-import { UrlShortenerRepositoryImpl } from '#api/repositories/url-shortener';
+import {
+  UrlShortenerRepository,
+  UrlShortenerRepositoryImpl,
+} from '#api/repositories/url-shortener';
 import { urlShortenerCache, urlShortenerDynamoDB } from '#api/inject/infra';
 
-export const urlShortenerRepository = new UrlShortenerRepositoryImpl(
-  urlShortenerDynamoDB,
-  urlShortenerCache,
-);
+export const urlShortenerRepository: UrlShortenerRepository =
+  new UrlShortenerRepositoryImpl(urlShortenerDynamoDB, urlShortenerCache);

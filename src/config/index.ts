@@ -15,6 +15,7 @@ export interface AppConfig {
   redis: {
     urlShortener: RedisConfigDTO;
   };
+  shortUrlHost: string;
   env: ENV;
 }
 

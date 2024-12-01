@@ -1,11 +1,11 @@
-import { RedisCacheImpl } from '#api/infra/redis';
+import { RedisCache, RedisCacheImpl } from '#api/infra/redis';
 import config from '#config';
-import { DynamoClientImpl } from '#api/infra/dynamo';
+import { DynamoClient, DynamoClientImpl } from '#api/infra/dynamo';
 
-export const urlShortenerCache = new RedisCacheImpl<string>(
+export const urlShortenerCache: RedisCache<string> = new RedisCacheImpl<string>(
   config.redis.urlShortener,
 );
 
-export const urlShortenerDynamoDB = new DynamoClientImpl(
+export const urlShortenerDynamoDB: DynamoClient = new DynamoClientImpl(
   config.dynamoDB.urlShortener,
 );
