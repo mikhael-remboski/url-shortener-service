@@ -1,0 +1,64 @@
+{
+  "info": {
+    "_postman_id": "5c9bcd24-82cd-4d8e-ae23-9f2f46029ec4",
+    "name": "url-shorten",
+    "schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+    "_exporter_id": "29972058"
+  },
+  "item": [
+    {
+      "name": "shorten-url",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"url\":\"https://www.youtube.com/watch?v=sqLw22tir6U\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": "http://localhost:8080/v1/url/shorten"
+      },
+      "response": []
+    },
+    {
+      "name": "delete",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"url\":\"https://www.youtube.com/watch?v=sqLw22tir6U\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": "http://localhost:8080/v1/url/8kijLs"
+      },
+      "response": []
+    },
+    {
+      "name": "redirect",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "http://localhost:8080/D4jCXF"
+      },
+      "response": []
+    },
+    {
+      "name": "get shortUrl",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "http://localhost:8080/v1/url/8kijLs"
+      },
+      "response": []
+    }
+  ]
+}

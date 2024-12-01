@@ -15,7 +15,7 @@ A backend template built with Express and Node.js to accelerate the development 
 
 ## Prerequisites
 
-- Node.js (>= 14.x)
+- Node.js (>= 20.x)
 - npm (>= 6.x)
 
 ## Installation
@@ -89,14 +89,14 @@ npm test
 docker build -t url-shortener-service .
 
 # Run the Docker image
-docker run -d --name mgrb-backend-container -p 8080:8080 url-shortener-service
+docker run -d --name url-shortener-container -p 8080:8080 url-shortener-service
 
 # Check the logs
-docker logs mgrb-backend-container
+docker logs url-shortener-container
 
 # Stop and remove the container
-docker stop mgrb-backend-container
-docker rm mgrb-backend-container
+docker stop url-shortener-container
+docker rm url-shortener-container
 ```
 
 ## License
