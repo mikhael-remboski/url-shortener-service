@@ -1,6 +1,6 @@
 import pino from 'pino';
-import config from '#config/config';
 import { ENV } from '#common/env';
+import config from '#config';
 
 /**
  * Configures and exports the logger instance.

@@ -1,5 +1,5 @@
 {
-  "name": "mgrb-backend-template",
+  "name": "url-shortener-service",
   "version": "1.0.0",
   "description": "A backend template built with Express and Node.js to kickstart development quickly.",
   "main": "dist/index.js",
@@ -20,8 +20,6 @@
   },
   "dependencies": {
     "@asteasolutions/zod-to-openapi": "^7.2.0",
-    "axios": "^1.7.7",
-    "axios-retry": "^4.5.0",
     "dotenv": "^16.4.5",
     "express": "^5.0.1",
     "pino": "^9.5.0",

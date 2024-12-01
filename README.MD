@@ -1,4 +1,4 @@
-# mgrb-backend-template
+# url-shortener-service
 
 ## Description
 
@@ -26,7 +26,7 @@ A backend template built with Express and Node.js to accelerate the development 
     ```
 2. Navigate to the project directory:
     ```sh
-    cd mgrb-backend-template
+    cd url-shortener-service
     ```
 3. Install the dependencies:
     ```sh
@@ -86,10 +86,10 @@ npm test
 
 ```sh
 # Build the Docker image
-docker build -t mgrb-backend-template .
+docker build -t url-shortener-service .
 
 # Run the Docker image
-docker run -d --name mgrb-backend-container -p 8080:8080 mgrb-backend-template
+docker run -d --name mgrb-backend-container -p 8080:8080 url-shortener-service
 
 # Check the logs
 docker logs mgrb-backend-container

@@ -1,18 +1,10 @@
-import { AppConfig } from '#config/config';
 import { ENV } from '#common/env';
+import { AppConfig } from '#config/index';
 
 export default {
   logger: {
     logLevel: 'info',
   },
-  clients: {
-    cartClient: {
-      baseUrl: 'https://dummyjson.com',
-      timeout: 10000,
-      retries: 3,
-      retryDelay: 100,
-      shouldResetTimeout: false,
-    },
-  },
+  clients: {},
   env: ENV.STG,
 } as AppConfig;

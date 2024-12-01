@@ -1,8 +1,6 @@
 import express, { Application } from 'express';
 import requestContextMiddleware from '#common/middlewares/request-context/request-context.middleware';
 import openApiRouter from '#api/openapi/openapi.router';
-import cartRouter from '#api/routers/cart.router';
-import { getCartController } from '#api/inject/controllers';
 
 const bootstrap = (): Application => {
   const app: express.Application = express();
@@ -12,7 +10,6 @@ const bootstrap = (): Application => {
 
   app.use(requestContextMiddleware);
   app.use(openApiRouter());
-  app.use(cartRouter(getCartController()));
   return app;
 };
 

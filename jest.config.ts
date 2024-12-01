@@ -1,16 +1,13 @@
 import { Config } from 'jest';
+import { pathsToModuleNameMapper } from 'ts-jest';
+import tsconfig from './tsconfig.json';
 
 const config: Config = {
   preset: 'ts-jest',
   testEnvironment: 'node',
-  moduleNameMapper: {
-    '^#common/(.*)$': '<rootDir>/src/common/$1',
-    '^#types/(.*)$': '<rootDir>/src/types/$1',
-    '^#external-models/(.*)$': '<rootDir>/src/external-models/$1',
-    '^#domain/(.*)$': '<rootDir>/src/domain/$1',
-    '^#infra/(.*)$': '<rootDir>/src/infra/$1',
-    '^#server/(.*)$': '<rootDir>/src/server/$1',
-  },
+  moduleNameMapper: pathsToModuleNameMapper(tsconfig.compilerOptions.paths, {
+    prefix: '<rootDir>/',
+  }),
   moduleFileExtensions: ['ts', 'js', 'json', 'node'],
   transform: {
     '^.+\\.ts$': 'ts-jest',
