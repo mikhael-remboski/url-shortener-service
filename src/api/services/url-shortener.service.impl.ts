@@ -16,10 +16,9 @@ export class UrlShortenerServiceImpl implements UrlShortenerService {
   async shortUrl(
     shortenUrlReq: ShortenUrlRequest,
   ): Promise<UrlShortenerResponse> {
-    const url = new URL(shortenUrlReq.url);
     const shortUrlPath = nanoid(6);
     const shortUrlHost = this.shortUrlHost;
-    const originalUrl = `${url.protocol}//${url.host}${url.pathname}${url.search}`;
+    const originalUrl = shortenUrlReq.url;
 
     await this.urlShortenerRepository.saveNewShortPath({
       shortUrlPath: shortUrlPath,
