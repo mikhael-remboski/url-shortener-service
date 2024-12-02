@@ -5,7 +5,7 @@ const SHORTEN_URL_PATH = '/v1/url/shorten';
 const GET_URL_PATH = '/v1/url/:shortUrlPath';
 const DELETE_URL_PATH = '/v1/url/:shortUrlPath';
 const REDIRECT_URL_PATH = '/:shortUrlPath';
-const RESERVED_PATHS = ['/health', '/v1'];
+const RESERVED_PATHS = ['/health', '/v1', '/api.json'];
 
 export default function createUrlShortenRouter(
   controller: UrlShortenController,

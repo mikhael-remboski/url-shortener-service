@@ -39,6 +39,8 @@ export class UrlShortenControllerImpl implements UrlShortenController {
       throw new ApiError('Short URL path is required', 400);
     }
     const response = await this.urlShortenerService.getUrl(shortUrlPath);
-    res.redirect(response.originalUrl);
+    res.set('Cache-Control', 'max-age=3600');
+    res.set('Location', response.originalUrl);
+    res.status(301).send();
   });
 }

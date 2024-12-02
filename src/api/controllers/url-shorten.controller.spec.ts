@@ -23,6 +23,7 @@ describe('UrlShortenControllerImpl', () => {
       json: jest.fn().mockReturnThis(),
       send: jest.fn().mockReturnThis(),
       redirect: jest.fn().mockReturnThis(),
+      set: jest.fn().mockReturnThis(),
     };
     nextFunction = jest.fn();
   });
@@ -147,7 +148,9 @@ describe('UrlShortenControllerImpl', () => {
         shortUrl: 'https://me.li/abc123',
         originalUrl: 'https://example.com/path',
       };
-      mockUrlShortenerService.getUrl.mockResolvedValue(mockRedirectResponse);
+      mockUrlShortenerService.getUrl = jest
+        .fn()
+        .mockResolvedValue(mockRedirectResponse);
 
       await urlShortenController.redirectUrl(
         mockRequest as Request,
@@ -156,8 +159,14 @@ describe('UrlShortenControllerImpl', () => {
       );
 
       expect(mockUrlShortenerService.getUrl).toHaveBeenCalledWith('abc123');
-      expect(mockResponse.redirect).toHaveBeenCalledWith(
-        mockRedirectResponse.originalUrl,
+      expect(mockResponse.status).toHaveBeenCalledWith(301);
+      expect(mockResponse.set).toHaveBeenCalledWith(
+        'Cache-Control',
+        'max-age=3600',
+      );
+      expect(mockResponse.set).toHaveBeenCalledWith(
+        'Location',
+        'https://example.com/path',
       );
     });
 

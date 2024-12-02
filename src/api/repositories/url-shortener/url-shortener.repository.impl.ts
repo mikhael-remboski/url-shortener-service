@@ -43,7 +43,6 @@ export class UrlShortenerRepositoryImpl implements UrlShortenerRepository {
         'Internal Server Error',
         result.error!.$response?.statusCode ?? 500,
         {
-          response: result.error!.$response?.body,
           retryable: result.error!.$retryable,
           message: result.error!.message,
         },
@@ -72,7 +71,6 @@ export class UrlShortenerRepositoryImpl implements UrlShortenerRepository {
         'Failed to delete short URL',
         dynamoResult.error!.$response?.statusCode ?? 500,
         {
-          response: dynamoResult.error!.$response?.body,
           retryable: dynamoResult.error!.$retryable,
           message: dynamoResult.error!.message,
         },
