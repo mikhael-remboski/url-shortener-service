@@ -2,7 +2,7 @@
 
 ## Description
 
-A microservice that shortens long URLs into unique short links, resolves them back to their original destinations, supports URL creation and deletion, and was developed as a technical challenge for a Mercado Libre interview.
+A microservice that shortens long URLs into unique short links, resolves them back to their original destinations, supports URL creation and deletion, and was developed as a technical challenge.
 
 
 ## Table of Contents
