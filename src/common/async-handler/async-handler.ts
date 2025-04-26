@@ -2,7 +2,7 @@ import type { NextFunction, Request, Response } from 'express';
 import logger from '#common/logger/logger';
 import { ZodError } from 'zod';
 import { ApiError } from '#common/errors/api-error';
-import RequestContext from '#common/middlewares/request-context/request-context';
+import { AppContext } from '#common/middlewares/request-context/request-context';
 
 type ControllerAction = (
   req: Request,
@@ -29,7 +29,7 @@ const handleZodError = (res: Response, error: ZodError) => {
   };
 
   logger.error(
-    { error: formattedError, ...RequestContext.getInstance() },
+    { error: formattedError, ...AppContext.getInstance().getContext() },
     'Zod error',
   );
 
@@ -64,7 +64,7 @@ export const asyncHandler =
           {
             metadata: error.metadata,
             httpStatus: error.httpStatus,
-            ...RequestContext.getInstance(),
+            ...AppContext.getInstance().getContext(),
           },
           error.message,
         );
@@ -79,7 +79,7 @@ export const asyncHandler =
       logger.error(
         {
           error,
-          ...RequestContext.getInstance(),
+          ...AppContext.getInstance().getContext(),
         },
         error.message,
       );

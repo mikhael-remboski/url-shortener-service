@@ -1,42 +1,66 @@
-import { v4 as uuidv4 } from 'uuid';
+import { AsyncLocalStorage } from 'node:async_hooks';
+import { randomUUID } from 'node:crypto';
 
-export interface RequestContextData {
-  tid: string;
-  headers: Record<string, string>;
+/**
+ * Interface that defines the structure of the application context data.
+ */
+export interface AppContextData {
+  traceId?: string;
+  path?: string;
+  headers?: Record<string, string | number | boolean | string[]>;
 }
 
 /**
- * Singleton class to manage request-specific context.
- * This ensures that each request has a unique tracking ID (tid) and its headers stored.
+ * Class that manages the application context using AsyncLocalStorage.
+ * Allows storing and accessing request-specific data anywhere in the code.
  */
-class RequestContext {
-  public data: RequestContextData;
-  private static instance: RequestContext;
+export class AppContext {
+  private static instance: AppContext;
+  private storage: AsyncLocalStorage<AppContextData>;
 
+  /**
+   * Private constructor to implement the Singleton pattern.
+   * Initializes the asynchronous storage.
+   */
   private constructor() {
-    this.data = { tid: uuidv4(), headers: {} };
+    this.storage = new AsyncLocalStorage<AppContextData>();
   }
 
   /**
-   * Returns the singleton instance of the RequestContext.
-   * If the instance doesn't exist, it creates a new one.
-   * @returns {RequestContext} - The singleton instance.
+   * Gets the single instance of AppContext.
+   * @returns The instance of AppContext.
    */
-  public static getInstance(): RequestContext {
-    if (!RequestContext.instance) {
-      RequestContext.instance = new RequestContext();
+  static getInstance(): AppContext {
+    if (!this.instance) {
+      this.instance = new AppContext();
     }
-    return RequestContext.instance;
+    return this.instance;
   }
 
   /**
-   * Resets the context with a new unique tid and provided headers.
-   * This ensures each request starts with a fresh context.
-   * @param headers - Headers from the incoming request.
+   * Gets the current context data.
+   * @returns The context data or undefined if there is no context.
    */
-  public reset(headers: Record<string, string> = {}): void {
-    this.data = { tid: uuidv4(), headers };
+  getContext(): AppContextData | undefined {
+    return this.storage.getStore();
+  }
+
+  /**
+   * Gets the traceId from the current context.
+   * @returns The traceId or undefined if there is no traceId.
+   */
+  getTraceId(): string | undefined {
+    return this.getContext()?.traceId;
+  }
+
+  /**
+   * Runs a function within a specific context.
+   * @param ctx - The context data to set.
+   * @param fn - The function to run within the context.
+   * @returns The result of the executed function.
+   */
+  run<R>(ctx: AppContextData, fn: () => R): R {
+    ctx.traceId = ctx.traceId || randomUUID();
+    return this.storage.run(ctx, fn);
   }
 }
-
-export default RequestContext;

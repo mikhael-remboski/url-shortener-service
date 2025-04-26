@@ -5,8 +5,8 @@ import { safeAsync } from '#common/safe-async';
 import { DynamoDBServiceException } from '@aws-sdk/client-dynamodb';
 import { ApiError } from '#common/errors/api-error';
 import logger from '#common/logger/logger';
-import RequestContext from '#common/middlewares/request-context/request-context';
 import { UrlShortenerRepository } from '#api/repositories/url-shortener/url-shortener.repository';
+import { AppContext } from '#common/middlewares/request-context/request-context';
 
 export class UrlShortenerRepositoryImpl implements UrlShortenerRepository {
   constructor(
@@ -79,7 +79,7 @@ export class UrlShortenerRepositoryImpl implements UrlShortenerRepository {
 
     if (redisResult.isError()) {
       logger.error(
-        { ...RequestContext.getInstance().data },
+        { ...AppContext.getInstance().getContext() },
         `${
           redisResult.error!.message ?? 'Failed to delete short URL from cache'
         }`,

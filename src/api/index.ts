@@ -1,9 +1,9 @@
 import express, { Application } from 'express';
-import requestContextMiddleware from '#common/middlewares/request-context/request-context.middleware';
 import openApiRouter from '#api/openapi/openapi.router';
 import urlShortenerRouter from '#api/routers/url-shortener.router';
 import { urlShortenController } from '#api/inject/controllers';
 import cors from 'cors';
+import { requestContextMiddleware } from '#common/middlewares/request-context/request-context.middleware';
 
 const bootstrap = (): Application => {
   const app: express.Application = express();
