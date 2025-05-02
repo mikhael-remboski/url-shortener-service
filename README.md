@@ -4,7 +4,6 @@
 
 A microservice that shortens long URLs into unique short links, resolves them back to their original destinations, supports URL creation and deletion, and was developed as a technical challenge.
 
-
 ## Table of Contents
 
 - [Installation](#installation)
@@ -22,17 +21,17 @@ A microservice that shortens long URLs into unique short links, resolves them ba
 ## Installation
 
 1. Clone the repository:
-    ```sh
-    git clone <repository-url>
-    ```
+   ```sh
+   git clone <repository-url>
+   ```
 2. Navigate to the project directory:
-    ```sh
-    cd url-shortener-service
-    ```
+   ```sh
+   cd url-shortener-service
+   ```
 3. Install the dependencies:
-    ```sh
-    npm install
-    ```
+   ```sh
+   npm install
+   ```
 
 ## Usage
 
